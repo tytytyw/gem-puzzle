@@ -51,8 +51,8 @@ for (let i = 1; i<=level-1; i++) {
     item.style.top = `${top * itemSize}px`;
 
     item.addEventListener("click", () => {
-        Move(i)
+        MakeAMove(i)
     })
-    // item.addEventListener("click", Move(i))
+    // item.addEventListener("click", MakeAMove(i))
   
 }
