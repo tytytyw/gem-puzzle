@@ -1,7 +1,9 @@
 // options
 let level = 16;
-const itemSize = 100;
-
+// calc item size
+let itemSize = document.documentElement.clientWidth > document.documentElement.clientHeight
+    ? document.documentElement.clientHeight / (Math.sqrt(level)+1)
+    : document.documentElement.clientWidth / (Math.sqrt(level)+1);
 
 //create game field
 function createGameField (level) {
@@ -19,11 +21,14 @@ function createGameField (level) {
     //item size
     field.style.width = levelSqrt * itemSize + 'px';
     field.style.height = levelSqrt * itemSize + 'px';
+    field.style.fontSize = itemSize + "px";
     //create field items
     for (let i = 0; i<level-1; i++) {
         const item = document.createElement("div");
         item.className = "field__item";
         field.append(item);
+        item.style.width = itemSize + 'px';
+        item.style.height = itemSize + 'px';
         item.innerText = i+1;
         //calc top and left coordinates(index)
         const left = i % levelSqrt;
@@ -39,14 +44,15 @@ function createGameField (level) {
         item.style.top = `${top * itemSize}px`;
         // click on item event listener
         item.addEventListener("click", (e) => {
+            console.log(e.preventDefault())
             e.preventDefault();
             MakeAMove(i+1, ArrayItems, emptyPosition)
         })
     }
 
     // temp random
-    for (let i=0; i<10000*level; i++) {
-        setTimeout( ()=> MakeAMove(Math.floor(Math.random() * (level)), ArrayItems, emptyPosition), 0);
+    for (let i=0; i<20000*level; i++) {
+         MakeAMove(Math.floor(Math.random() * (level)), ArrayItems, emptyPosition)
     }
 
 }
