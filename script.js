@@ -1,25 +1,57 @@
+// options
 let level = 16;
-
-
-const field = document.createElement("div");
-field.classList.add("field");
-document.body.append(field);
 const itemSize = 100;
 
-const emptyPosition = {
-    top: 0,
-    left: 0
+
+//create game field
+function createGameField (level) {
+    let levelSqrt = Math.sqrt(level);
+    const field = document.createElement("div");
+    //save empty coordinates
+    const emptyPosition = {
+        top: levelSqrt - 1,
+        left: levelSqrt - 1
+    };
+    const ArrayItems = [];
+    ArrayItems.push(emptyPosition);
+    field.classList.add("field");
+    document.body.append(field);
+    //item size
+    field.style.width = levelSqrt * itemSize + 'px';
+    field.style.height = levelSqrt * itemSize + 'px';
+    //create field items
+    for (let i = 0; i<level-1; i++) {
+        const item = document.createElement("div");
+        item.className = "field__item";
+        field.append(item);
+        item.innerText = i+1;
+        //calc top and left coordinates(index)
+        const left = i % levelSqrt;
+        const top = (i - left) / levelSqrt;
+        //save item coordinates in obj
+        ArrayItems.push({
+            left: left,
+            top: top,
+            el: item
+        });
+        // item width and height
+        item.style.left = `${left * itemSize}px`;
+        item.style.top = `${top * itemSize}px`;
+        // click on item event listener
+        item.addEventListener("click", () => {
+            MakeAMove(i+1, ArrayItems, emptyPosition)
+        })
+    }
+
 }
 
-const ArrayItems = [];
-ArrayItems.push(emptyPosition)
-
-const MakeAMove = (index) => {
-
+// function click on item
+const MakeAMove = (index, ArrayItems, emptyPosition) => {
     const item = ArrayItems[index];
-
+    // check valid click
     if (Math.abs(emptyPosition.left - item.left) + Math.abs(emptyPosition.top - item.top) === 1) {
-
+        console.log('index')
+        //coordinates mapping (emty and clicked item)
         item.el.style.left = `${emptyPosition.left * itemSize}px`;
         item.el.style.top = `${emptyPosition.top * itemSize}px`;
         const tempLeft = emptyPosition.left;
@@ -29,30 +61,11 @@ const MakeAMove = (index) => {
         item.left = tempLeft;
         item.top = tempTop;
     }
+
+    
 }
 
 
-for (let i = 1; i<=level-1; i++) {
-    const item = document.createElement("div");
-    item.className = "field__item";
-    field.appendChild(item);
-    item.innerText = i;
-    const left = i % 4;
-    const top = (i - left) / 4;
 
-    ArrayItems.push({
-        left: left,
-        top: top,
-        el: item
-    });
-
-
-    item.style.left = `${left * itemSize}px`;
-    item.style.top = `${top * itemSize}px`;
-
-    item.addEventListener("click", () => {
-        MakeAMove(i)
-    })
-    // item.addEventListener("click", MakeAMove(i))
-  
-}
+//call
+createGameField(level);

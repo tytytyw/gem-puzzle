@@ -1,9 +1,9 @@
 .field {
-    width: 400px;
-    height:  400px;
+    /* width: 400px;
+    height:  400px; */
     position: relative;
     margin: 0 auto;
-    border: black solid black;
+    border: black solid 2px;
     border-radius: 10px;
     background-color: rgb(81, 92, 143);
     
@@ -16,7 +16,7 @@
     background-color: rgb(171, 206, 246);
     border: 2px solid rgb(81, 92, 143);
     box-sizing: border-box;
-    font-size: 4vw;
+    font-size: 1.5rem;
     display: flex;
     justify-content: center;
     align-items: center;
