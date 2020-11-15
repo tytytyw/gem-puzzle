@@ -43,6 +43,11 @@ function createGameField (level) {
         })
     }
 
+    // temp random
+    for (let i=0; i<10000*level; i++) {
+        MakeAMove(Math.floor(Math.random() * (level)), ArrayItems, emptyPosition)
+    }
+
 }
 
 // function click on item
@@ -50,7 +55,7 @@ const MakeAMove = (index, ArrayItems, emptyPosition) => {
     const item = ArrayItems[index];
     // check valid click
     if (Math.abs(emptyPosition.left - item.left) + Math.abs(emptyPosition.top - item.top) === 1) {
-        console.log('index')
+        // console.log('index')
         //coordinates mapping (emty and clicked item)
         item.el.style.left = `${emptyPosition.left * itemSize}px`;
         item.el.style.top = `${emptyPosition.top * itemSize}px`;
