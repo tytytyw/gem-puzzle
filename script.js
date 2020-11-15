@@ -45,7 +45,7 @@ function createGameField (level) {
 
     // temp random
     for (let i=0; i<10000*level; i++) {
-        MakeAMove(Math.floor(Math.random() * (level)), ArrayItems, emptyPosition)
+        setTimeout( ()=> MakeAMove(Math.floor(Math.random() * (level)), ArrayItems, emptyPosition), 0);
     }
 
 }
