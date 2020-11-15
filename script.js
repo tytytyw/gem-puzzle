@@ -38,7 +38,8 @@ function createGameField (level) {
         item.style.left = `${left * itemSize}px`;
         item.style.top = `${top * itemSize}px`;
         // click on item event listener
-        item.addEventListener("click", () => {
+        item.addEventListener("click", (e) => {
+            e.preventDefault();
             MakeAMove(i+1, ArrayItems, emptyPosition)
         })
     }
