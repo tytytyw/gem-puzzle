@@ -1,44 +1,90 @@
 // options
-let level = 16;
+let level;
+level = localStorage.getItem("gem-puzzle--level")**2 || 16;
 let levelSqrt = Math.sqrt(level);
 // calc item size
 let itemSize = document.documentElement.clientWidth > document.documentElement.clientHeight
     ? document.documentElement.clientHeight / (levelSqrt + 1)
     : document.documentElement.clientWidth  / (levelSqrt + 1);
 let count = 0;
+let time = 0;
 //create header
 createHeader = () => {
+    //create tags
     const header = document.createElement("header");
+    const wrap = document.createElement("div");
     const timer = document.createElement("div");
     const counter = document.createElement("div");
-    const btn = document.createElement("btn");
+    const btn = document.createElement("div");
+    const elRestart = document.createElement("div");
+    const elLevels = document.createElement("div");
+    const elLevelsWrap = document.createElement("div");
+    //tags props
+    elLevels.className = "levels";
+    elLevelsWrap.className = "levels_wrap";
+    elRestart.className = "restart";
+    elRestart.textContent = "Restart";
+    elLevels.textContent = "Level";
     timer.className = "timer";
+    wrap.className = "wrap";
     counter.className = "counter";
     btn.className = "btn";
     btn.textContent = "Pause"
     document.body.append(header);
-    header.append(timer);
-    header.append(counter);
-    header.append(btn);
+    //tag insert
+    header.append(wrap);
+    wrap.append(timer);
+    wrap.append(counter);
+    wrap.append(btn);
+    wrap.append(elRestart);
+    wrap.append(elLevels);
+    elLevels.append(elLevelsWrap);
+    //header props
     counter.innerHTML = `Moves: ${count}`
-    header.style.width = levelSqrt * itemSize + 'px';
+    header.style.width = levelSqrt * itemSize * 1.1 + 'px';
+    timer.innerHTML = "00:00"
+    //create levels list
+    for (let i = 0; i < 6; i++) {
+        let item = document.createElement("a");
+        item.className = "levels_list"
+        item.textContent = `${i+3}x${i+3}`;
+        item.setAttribute('data-value', i+3);
+        elLevelsWrap.appendChild(item)
+    }
 
-    let time = 0;
     const upgradeTimer = () => {
-        time++
-        timer.innerHTML = `${Math.floor(time/60)} : ${time%60}`
+        time++;
+        let min = Math.floor(time/60);
+        let sec = time%60;
+        timer.innerHTML = `${min<10 ? '0'+min : min}:${sec<10 ? '0'+sec : sec}`
     }
     let upgradeTimerInterval = setInterval(upgradeTimer, 1000)
-    
+    //click pause
     btn.onclick = (e) => {
-        e.target.parentElement.classList.toggle("bloked");
+        e.target.parentElement.parentElement.classList.toggle("bloked");
         e.currentTarget.classList.toggle("active");
-        e.target.className.includes("active")
-        ? clearInterval(upgradeTimerInterval)
-        : upgradeTimerInterval = setInterval(upgradeTimer, 1000)
+        if (e.target.className.includes("active")) {
+            clearInterval(upgradeTimerInterval);
+            e.target.textContent = "Resume"
+        } else {
+            upgradeTimerInterval = setInterval(upgradeTimer, 1000);
+            e.target.textContent = "Pause"
+        }
     }
+    //click levels
+    elLevels.onclick = (e) => {
+        e.target.className === "levels_list"
+        ? (() => {localStorage.setItem('gem-puzzle--level', e.target.getAttribute('data-value')); this.location.reload()})()
+        : e.currentTarget.classList.toggle("active");
+    }
+    // click restart
+    function restartGame () {
+        window.location.reload()
+    }
+    elRestart.addEventListener("click", restartGame)
 }
 
+// moves counter
 const writeCouter = count => {
     document.querySelector(".counter").innerHTML = ` Moves: ${count}`
 }
@@ -63,7 +109,7 @@ function createGameField (level) {
     field.style.height = levelSqrt * itemSize + 'px';
     field.style.fontSize = itemSize + "px";
     //create field items
-    for (let i = 0; i<level-1; i++) {
+    for (let i = 0; i < level - 1; i++) {
         const item = document.createElement("div");
         item.className = "field__item";
         field.append(item);
@@ -78,7 +124,7 @@ function createGameField (level) {
             left: left,
             top: top,
             el: item,
-            id: ""+left+top
+            id: "" + left + top
         });
         // item width and height
         item.style.left = `${left * itemSize}px`;
@@ -89,7 +135,11 @@ function createGameField (level) {
             MakeAMove(i+1, ArrayItems, emptyPosition, 'clicked')
             // after compelete
             function finish () {
-                alert('done')
+                let min = Math.floor(time / 60);
+                let sec = time % 60;
+                let result = `${min<10 ? '0'+min : min}:${sec<10 ? '0'+sec : sec}`
+                alert(`Victory! time- ${result}, moves- ${count}`)
+                window.location.reload()
             }
             //check complete level and call func
             if (ArrayItems.every(item => "" + item.left + item.top === item.id)) {
@@ -118,7 +168,6 @@ const MakeAMove = (index, ArrayItems, emptyPosition, typeCall) => {
         emptyPosition.top = item.top;
         item.left = tempLeft;
         item.top = tempTop;
-
         typeCall ? writeCouter(++count) : "";
     }
 }

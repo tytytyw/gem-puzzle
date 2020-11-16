@@ -1,21 +1,42 @@
 header {
+    padding-top: 10px;
+    position: relative;
+    box-sizing: content-box;
     margin: 0 auto;
-    display: flex;
-    justify-content: space-around;
-    font-size: 2rem;
+    font-size: 1rem;
+    user-select: none;
+    border: 1vmin solid transparent;
 }
 
-.bloked::after {
-    top: 0;
-    left: 0;
+header::after {
     content: "";
     position: absolute;
-    height: 100vh;
-    width: 100vw;
-    background-color: rgba(0, 0, 0, .9);
+    background-color: #fff;
+    height: 90vh;
+    width: 100%;
+    transition: top .3s linear;
+    top: -100vh;
     z-index: 1;
 }
 
+header.bloked::after {
+    background-color: #fff;
+    top: 0;
+    content: "";
+}
+
+header.bloked .timer,
+header.bloked .counter {
+    color: rgb(255, 62, 62);
+    z-index: 2;
+}
+
+header .wrap {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    justify-content: space-around;
+}
 
 .field {
     z-index: 0;
@@ -24,7 +45,6 @@ header {
     border: 1vmin solid rgb(81, 92, 143);
     border-radius: 1.5vmin;
     background-color: rgb(81, 92, 143);
-    
 }
 
 .field__item {
@@ -44,5 +64,78 @@ header {
 
 .btn {
     cursor: pointer;
-    z-index: 3;
+    min-width: 7vmin;
+}
+
+.btn,
+.levels,
+.restart {
+    cursor: pointer;
+}
+
+.btn:hover,
+.levels:hover,
+.restart:hover {
+    background-color: #fff;
+    color:  rgb(81, 92, 143);
+    transition: background .4s ease;
+}
+
+.btn:active,
+.levels:active,
+.restart:active {
+    opacity: .5;
+}
+
+.wrap {
+    padding: 0 2vmin;
+}
+
+.wrap div {
+    border: rgb(81, 92, 143) solid 2px;
+    background-color: rgb(81, 92, 143);
+    color: #fff;
+    padding: .5vw 1vw;
+    border-radius: 10px;
+    text-align: center;
+}
+
+.levels_wrap {
+    display: none;
+    position: relative;
+    height: 30vh;
+    position: absolute;
+    flex-direction: column;
+    justify-content: space-around;
+    cursor: default;
+}
+
+.levels {
+    position: relative;
+}
+
+.levels.active .levels_wrap {
+    display: flex;
+    left: 0;
+    width: 150%;
+    top: 30px;
+    padding: 0;
+}
+
+.levels.active .levels_wrap .levels_list {
+    display: block;
+    cursor: pointer;
+    transition: opacity .3s ease;
+}
+
+.levels_list:hover {
+    opacity: .4;
+}
+
+
+@media (max-width: 350px) {
+    .wrap div {
+        padding: 2px 1px;
+        font-size: 12px;
+    }
 }
